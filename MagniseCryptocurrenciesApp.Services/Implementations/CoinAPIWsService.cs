@@ -87,11 +87,11 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             coinApiWsClient.SendHelloMessage(helloMsg);
         }
 
-        private async void RateHandler(object sender, ExchangeRate rate)
+        private void RateHandler(object sender, ExchangeRate rate)
         {
             StoreRateInRatesTable(rate);
 
-            await _assetsHubContext.Clients.All.SendAsync("ChangeRate", rate).ConfigureAwait(false);
+            _assetsHubContext.Clients.All.SendAsync("ChangeRate", rate).ConfigureAwait(false);
         }
 
         private void StoreRateInRatesTable(ExchangeRate rate)
@@ -116,6 +116,8 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
 
                     assetsService.StoreRatesTable(_ratesDictionary);
                 }
+
+                _ratesDictionary.Clear();
 
                 Task.Delay(TimeSpan.FromSeconds(_secondsToTableUpdating)).Wait();
             }
