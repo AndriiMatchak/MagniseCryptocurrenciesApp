@@ -15,7 +15,8 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
     {
         private static readonly ManualResetEvent _coinsQuoteResetEvent = new ManualResetEvent(false);
 
-        private readonly Timer _ratesTableProcessTymer;
+        private int _secondsToTableUpdating;
+        private bool _tableUpdatingEnabled = true;
 
         private readonly IHubContext<AssetsHub> _assetsHubContext;
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -26,8 +27,6 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
         {
             _assetsHubContext = assetsHubContext;
             _serviceScopeFactory = serviceScopeFactory;
-
-            _ratesTableProcessTymer = new Timer(new TimerCallback(StoreRatesTableProcess), null, 0, 10000);
         }
 
         public void ReadCryptoCurrenciesData()
@@ -39,13 +38,15 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
                     var configurationManager = scope.ServiceProvider.GetService<IConfigurationManagerService>();
                     var assetsService = scope.ServiceProvider.GetService<IAssetsService>();
 
-                    ChangeTimerInterval(configurationManager);
+                    _secondsToTableUpdating = configurationManager.GetSecondsToRatesUpdating();
 
                     var subscribeAssetsid = assetsService.GerAllAssetsId();
 
                     using (var coinApiWsClient = InitClient())
                     {
                         SendHelloMessage(coinApiWsClient, subscribeAssetsid, configurationManager);
+
+                        Task.Run(() => StoreRatesTableProcess()).ConfigureAwait(false);
 
                         _coinsQuoteResetEvent.WaitOne();
                     }
@@ -105,24 +106,19 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             }
         }
 
-        private void StoreRatesTableProcess(object obj)
+        private void StoreRatesTableProcess()
         {
-            using (var scope = _serviceScopeFactory.CreateScope())
+            while (_tableUpdatingEnabled)
             {
-                var assetsService = scope.ServiceProvider.GetService<IAssetsService>();
+                using (var scope = _serviceScopeFactory.CreateScope())
+                {
+                    var assetsService = scope.ServiceProvider.GetService<IAssetsService>();
 
-                assetsService.StoreRatesTable(_ratesDictionary);
+                    assetsService.StoreRatesTable(_ratesDictionary);
+                }
+
+                Task.Delay(TimeSpan.FromSeconds(_secondsToTableUpdating)).Wait();
             }
-
-            _ratesDictionary.Clear();
-        }
-
-        private void ChangeTimerInterval(IConfigurationManagerService configurationManager)
-        {
-            var secondsToRatesUpdating = configurationManager.GetSecondsToRatesUpdating();
-            _ratesTableProcessTymer.Change(
-                TimeSpan.FromSeconds(secondsToRatesUpdating).Milliseconds,
-                TimeSpan.FromSeconds(secondsToRatesUpdating).Milliseconds);
         }
     }
 }
