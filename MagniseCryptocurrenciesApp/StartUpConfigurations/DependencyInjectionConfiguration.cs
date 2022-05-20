@@ -23,7 +23,7 @@ namespace MagniseCryptocurrenciesApp.StartUpConfigurations
 
             services.AddScoped<IConfigurationManagerService, ConfigurationManagerService>();
 
-            services.AddScoped<IAssetsService, AssetsService>();
+            services.AddTransient<IAssetsService, AssetsService>();
 
             services.AddScoped<ICoinAPIRestService, CoinAPIRestService>();
 
