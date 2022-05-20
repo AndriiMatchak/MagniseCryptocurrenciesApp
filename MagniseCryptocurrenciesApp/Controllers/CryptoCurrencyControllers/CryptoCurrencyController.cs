@@ -6,17 +6,17 @@ using System.Collections.Generic;
 namespace MagniseCryptocurrenciesApp.Controllers.CryptoCurrencyControllers
 {
     [Route("api/[controller]/[action]")]
-    public class CryptoCurrencyController : BaseController
+    public class AssetsController : BaseController
     {
         private readonly IAssetsService _assetsService;
 
-        public CryptoCurrencyController(IAssetsService assetsService)
+        public AssetsController(IAssetsService assetsService)
         {
             _assetsService = assetsService;
         }
 
         [HttpGet]
-        public IActionResult GetAllCryptoCurrencies()
+        public IActionResult GetAllAssets()
         {
             return OkResult(_assetsService.GetAllAssets());
         }
