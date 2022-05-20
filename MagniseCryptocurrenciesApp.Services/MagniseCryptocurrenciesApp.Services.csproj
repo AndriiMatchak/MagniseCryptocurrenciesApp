@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CoinAPI.REST.V1" Version="2.0.9" />
+    <PackageReference Include="CoinAPI.WebSocket.V1" Version="2.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MagniseCryptocurrenciesApp.Common\MagniseCryptocurrenciesApp.Common.csproj" />
+    <ProjectReference Include="..\MagniseCryptocurrenciesApp.Hubs\MagniseCryptocurrenciesApp.Hubs.csproj" />
+    <ProjectReference Include="..\MagniseCryptocurrenciesApp.Repositories\MagniseCryptocurrenciesApp.Repositories.csproj" />
+  </ItemGroup>
+
+</Project>
