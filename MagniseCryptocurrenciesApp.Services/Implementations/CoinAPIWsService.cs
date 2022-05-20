@@ -33,23 +33,23 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
         {
             try
             {
-                using (var scope = _serviceScopeFactory.CreateScope())
+                var scope = _serviceScopeFactory.CreateScope();
+                var configurationManager = scope.ServiceProvider.GetService<IConfigurationManagerService>();
+                var assetsService = scope.ServiceProvider.GetService<IAssetsService>();
+
+                _secondsToTableUpdating = configurationManager.GetSecondsToRatesUpdating();
+
+                var subscribeAssetsid = assetsService.GerAllAssetsId();
+
+                using (var coinApiWsClient = InitClient())
                 {
-                    var configurationManager = scope.ServiceProvider.GetService<IConfigurationManagerService>();
-                    var assetsService = scope.ServiceProvider.GetService<IAssetsService>();
+                    SendHelloMessage(coinApiWsClient, subscribeAssetsid, configurationManager);
 
-                    _secondsToTableUpdating = configurationManager.GetSecondsToRatesUpdating();
+                    scope.Dispose();
 
-                    var subscribeAssetsid = assetsService.GerAllAssetsId();
+                    Task.Run(() => StoreRatesTableProcess()).ConfigureAwait(false);
 
-                    using (var coinApiWsClient = InitClient())
-                    {
-                        SendHelloMessage(coinApiWsClient, subscribeAssetsid, configurationManager);
-
-                        Task.Run(() => StoreRatesTableProcess()).ConfigureAwait(false);
-
-                        _coinsQuoteResetEvent.WaitOne();
-                    }
+                    _coinsQuoteResetEvent.WaitOne();
                 }
             }
             catch(Exception ex)
