@@ -18,9 +18,9 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             return _configuration["CoinApiKey"];
         }
 
-        public int GetSecondsToRatesUpdating()
+        public int GetItemsCountToRatesUpdating()
         {
-            return Convert.ToInt32(_configuration["SecondsToRatesUpdating"]);
+            return Convert.ToInt32(_configuration["ItemsCountToRatesUpdating"]);
         }
     }
 }

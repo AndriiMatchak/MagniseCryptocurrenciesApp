@@ -1,5 +1,6 @@
 ﻿
 using System;
+using System.Collections.Generic;
 
 namespace MagniseCryptocurrenciesApp.DataAccess.EntitesModel
 {
@@ -14,5 +15,7 @@ namespace MagniseCryptocurrenciesApp.DataAccess.EntitesModel
         public bool TypeIsCrypto { get; set; }
 
         public DateTime ModifiedDate { get; set; }
+
+        public virtual ICollection<AssetRate> AssetRates { get; set; }
     }
 }

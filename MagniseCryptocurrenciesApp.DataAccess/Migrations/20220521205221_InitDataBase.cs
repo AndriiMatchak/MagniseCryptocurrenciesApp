@@ -21,10 +21,33 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_Assets", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "AssetRates",
+                columns: table => new
+                {
+                    AssetId = table.Column<string>(nullable: false),
+                    AssetIdQuote = table.Column<string>(nullable: false),
+                    ModifiedDate = table.Column<DateTime>(nullable: false),
+                    Rate = table.Column<decimal>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssetRates", x => new { x.AssetId, x.AssetIdQuote });
+                    table.ForeignKey(
+                        name: "FK_AssetRates_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "AssetRates");
+
             migrationBuilder.DropTable(
                 name: "Assets");
         }

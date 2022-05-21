@@ -16,9 +16,14 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             coinApiRestClient = InitClient();
         }
 
-        public Task<List<Asset>> GetAllowedAssets()
+        public Task<List<Asset>> GetAllAssetsAsync()
         {
             return coinApiRestClient.Metadata_list_assetsAsync();
+        }
+
+        public Task<ExchangeCurrentrate> GetAssetRatesAsync(string assetId)
+        {
+            return coinApiRestClient.Exchange_rates_get_all_current_ratesAsync(assetId);
         }
 
         public CoinApiRestClient InitClient()

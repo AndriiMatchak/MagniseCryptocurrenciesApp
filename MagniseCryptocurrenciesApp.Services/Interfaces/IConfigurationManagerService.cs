@@ -5,6 +5,6 @@ namespace MagniseCryptocurrenciesApp.Services.Interfaces
     {
         public string GetCoinApiKey();
 
-        public int GetSecondsToRatesUpdating();
+        public int GetItemsCountToRatesUpdating();
     }
 }

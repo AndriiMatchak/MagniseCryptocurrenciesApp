@@ -40,6 +40,34 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
 
                     b.ToTable("Assets");
                 });
+
+            modelBuilder.Entity("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.AssetRate", b =>
+                {
+                    b.Property<string>("AssetId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AssetIdQuote")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Rate")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("AssetId", "AssetIdQuote");
+
+                    b.ToTable("AssetRates");
+                });
+
+            modelBuilder.Entity("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.AssetRate", b =>
+                {
+                    b.HasOne("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.Asset", "Asset")
+                        .WithMany("AssetRates")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 #pragma warning restore 612, 618
         }
     }

@@ -14,13 +14,21 @@ namespace MagniseCryptocurrenciesApp.DataAccess
 
         public virtual DbSet<Asset> Assets { get; set; }
 
+        public virtual DbSet<AssetRate> AssetRates { get; set; }
+
         #endregion
 
         #region ModelBuilder
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Asset>()
+                .HasMany(a => a.AssetRates)
+                .WithOne(ar => ar.Asset)
+                .HasForeignKey(ar => ar.AssetId)
+                .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<AssetRate>().HasKey(ar => new { ar.AssetId, ar.AssetIdQuote });
         }
 
         #endregion

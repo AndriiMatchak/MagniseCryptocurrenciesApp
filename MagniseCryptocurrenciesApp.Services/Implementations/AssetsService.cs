@@ -48,14 +48,7 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             UpdateAssets(assetsToUpdate);
         }
 
-        public List<AssetDTO> GetAllAssets()
-        {
-            return _assetRepository.GetAll()
-                .Select(asset => MapAssetDTO(asset))
-                .ToList();
-        }
-
-        public AssetDTO GetAssetPriceInfo(string assetId)
+        public AssetDTO GetAsset(string assetId)
         {
             var asset = _assetRepository
                 .Get(asset => asset.Id == assetId);
@@ -63,7 +56,7 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             return MapAssetDTO(asset);
         }
 
-        public List<AssetDTO> GetAssetsPriceInfo(List<string> assetsId)
+        public List<AssetDTO> GetAssets(List<string> assetsId)
         {
             return _assetRepository
                 .GetAll(asset => assetsId.Contains(asset.Id))
@@ -111,23 +104,6 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             assetToUpdate.PriceUSD = asset.price_usd;
             assetToUpdate.TypeIsCrypto = asset.type_is_crypto;
             assetToUpdate.ModifiedDate = DateTime.UtcNow;
-        }
-
-        private void UpdateAssetPrice(ExchangeRate rate, Asset assetToUpdate)
-        {
-            assetToUpdate.PriceUSD = rate.rate;
-            assetToUpdate.ModifiedDate = rate.time;
-        }
-
-        public void StoreRatesTable(Dictionary<string, ExchangeRate> ratesTable)
-        {
-            var assetsToUpdate = _assetRepository.GetAll(assert =>
-                ratesTable.Select(rate => rate.Key).Contains(assert.Id));
-
-            foreach (var asset in assetsToUpdate)
-                UpdateAssetPrice(ratesTable[asset.Id], asset);
-
-            _assetRepository.UpdateRange(assetsToUpdate);
         }
     }
 }

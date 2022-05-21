@@ -7,16 +7,12 @@ namespace MagniseCryptocurrenciesApp.Services.Interfaces
 {
     public interface IAssetsService
     {
-        public void StoreAssets(List<Asset> assets);
+        void StoreAssets(List<Asset> assets);
 
-        public void StoreRatesTable(Dictionary<string, ExchangeRate> ratesTable);
+        string[] GerAllAssetsId();
 
-        public string[] GerAllAssetsId();
+        AssetDTO GetAsset(string assetId);
 
-        public List<AssetDTO> GetAllAssets();
-
-        public AssetDTO GetAssetPriceInfo(string assetId);
-
-        public List<AssetDTO> GetAssetsPriceInfo(List<string> assetsId);
+        List<AssetDTO> GetAssets(List<string> assetsId);
     }
 }
