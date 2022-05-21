@@ -31,7 +31,7 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             foreach (var rate in rates)
             {
                 var dbAssetRate = dbAssetRates.FirstOrDefault(r =>
-                r.AssetIdQuote == rate.asset_id_quote);
+                r.AssetQuoteId == rate.asset_id_quote);
 
                 if (dbAssetRate != null)
                 {
@@ -97,7 +97,7 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             return new AssetRate()
             {
                 AssetId = assetId,
-                AssetIdQuote = rate.asset_id_quote,
+                AssetQuoteId = rate.asset_id_quote,
                 Rate = rate.rate,
                 ModifiedDate = rate.time
             };
@@ -107,8 +107,9 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
         {
             return new AssetRateDTO()
             {
+                Id = assetRate.Id,
                 AssetId = assetRate.AssetId,
-                AssetIdQuote = assetRate.AssetIdQuote,
+                AssetQuoteId = assetRate.AssetQuoteId,
                 Rate = assetRate.Rate,
                 ModifiedDate = assetRate.ModifiedDate
             };

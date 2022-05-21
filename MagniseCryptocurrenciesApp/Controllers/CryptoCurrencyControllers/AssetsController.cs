@@ -16,13 +16,13 @@ namespace MagniseCryptocurrenciesApp.Controllers.CryptoCurrencyControllers
         }
 
         [HttpGet]
-        public IActionResult GetAssetPriceInfo(string assetId)
+        public IActionResult GetAsset(string assetId)
         {
             return OkResult(_assetsService.GetAsset(assetId));
         }
 
         [HttpGet]
-        public IActionResult GetAssetsPriceInfo(List<string> assetsId)
+        public IActionResult GetAssets(List<string> assetsId)
         {
             return OkResult(_assetsService.GetAssets(assetsId));
         }

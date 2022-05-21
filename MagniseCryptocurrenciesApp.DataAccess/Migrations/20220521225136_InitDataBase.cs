@@ -26,21 +26,38 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
                 name: "AssetRates",
                 columns: table => new
                 {
-                    AssetId = table.Column<string>(nullable: false),
-                    AssetIdQuote = table.Column<string>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
                     ModifiedDate = table.Column<DateTime>(nullable: false),
+                    AssetId = table.Column<string>(nullable: true),
+                    AssetQuoteId = table.Column<string>(nullable: true),
                     Rate = table.Column<decimal>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_AssetRates", x => new { x.AssetId, x.AssetIdQuote });
+                    table.PrimaryKey("PK_AssetRates", x => x.Id);
                     table.ForeignKey(
                         name: "FK_AssetRates_Assets_AssetId",
                         column: x => x.AssetId,
                         principalTable: "Assets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AssetRates_Assets_AssetQuoteId",
+                        column: x => x.AssetQuoteId,
+                        principalTable: "Assets",
+                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssetRates_AssetQuoteId",
+                table: "AssetRates",
+                column: "AssetQuoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssetRates_AssetId_AssetQuoteId",
+                table: "AssetRates",
+                columns: new[] { "AssetId", "AssetQuoteId" },
+                unique: true,
+                filter: "[AssetId] IS NOT NULL AND [AssetQuoteId] IS NOT NULL");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

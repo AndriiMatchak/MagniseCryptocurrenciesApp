@@ -26,9 +26,17 @@ namespace MagniseCryptocurrenciesApp.DataAccess
                 .HasMany(a => a.AssetRates)
                 .WithOne(ar => ar.Asset)
                 .HasForeignKey(ar => ar.AssetId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.NoAction);
 
-            modelBuilder.Entity<AssetRate>().HasKey(ar => new { ar.AssetId, ar.AssetIdQuote });
+            modelBuilder.Entity<Asset>()
+               .HasMany(a => a.QuoteRates)
+               .WithOne(ar => ar.Quote)
+               .HasForeignKey(ar => ar.AssetQuoteId)
+               .OnDelete(DeleteBehavior.NoAction);
+
+            modelBuilder.Entity<AssetRate>().HasKey(ar => ar.Id);
+            modelBuilder.Entity<AssetRate>().HasIndex(ar =>
+            new { ar.AssetId, ar.AssetQuoteId }).IsUnique();
         }
 
         #endregion

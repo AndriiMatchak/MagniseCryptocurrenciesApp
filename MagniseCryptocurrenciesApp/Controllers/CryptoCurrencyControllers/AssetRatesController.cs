@@ -1,10 +1,7 @@
 ﻿using MagniseCryptocurrenciesApp.Controllers.BaseControllers;
 using MagniseCryptocurrenciesApp.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace MagniseCryptocurrenciesApp.Controllers.CryptoCurrencyControllers
 {

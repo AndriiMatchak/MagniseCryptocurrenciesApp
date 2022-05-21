@@ -1,5 +1,4 @@
-﻿using CoinAPI.WebSocket.V1.DataModels;
-using MagniseCryptocurrenciesApp.Common.DTOs.AssetDTOs;
+﻿using MagniseCryptocurrenciesApp.Common.DTOs.AssetDTOs;
 using MagniseCryptocurrenciesApp.DataAccess.EntitesModel;
 using MagniseCryptocurrenciesApp.Repositories.Interfaces;
 using MagniseCryptocurrenciesApp.Services.Interfaces;
