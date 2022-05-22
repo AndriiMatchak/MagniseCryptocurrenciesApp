@@ -31,6 +31,7 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             var assetsToAdd = new List<Asset>();
             var assetsToUpdate = new List<Asset>();
 
+            // Divides the collection into 10 parts.
             var assetGroups = assets.Select((item, index) => new { index, item })
                        .GroupBy(x => x.index % 10)
                        .Select(x => x.Select(y => y.item));
