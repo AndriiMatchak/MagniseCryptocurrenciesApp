@@ -6,8 +6,10 @@ namespace MagniseCryptocurrenciesApp.Services.Interfaces
 {
     public interface ICoinAPIRestService
     {
-        public Task<List<Asset>> GetAllAssetsAsync();
+        Task<List<Asset>> GetAllAssetsAsync();
 
-        public Task<ExchangeCurrentrate> GetAssetRatesAsync(string assetId);
+        Task<ExchangeCurrentrate> GetAssetRatesAsync(string assetId);
+
+        Task<List<Symbol>> GetAllSymbolsAsync();
     }
 }

@@ -47,6 +47,32 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
                         principalColumn: "Id");
                 });
 
+            migrationBuilder.CreateTable(
+                name: "AssetSymbols",
+                columns: table => new
+                {
+                    Id = table.Column<string>(nullable: false),
+                    Price = table.Column<decimal>(nullable: true),
+                    ModifiedDate = table.Column<DateTime>(nullable: false),
+                    Type = table.Column<string>(nullable: true),
+                    AssetId = table.Column<string>(nullable: true),
+                    AssetQuoteId = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_AssetSymbols", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_AssetSymbols_Assets_AssetId",
+                        column: x => x.AssetId,
+                        principalTable: "Assets",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_AssetSymbols_Assets_AssetQuoteId",
+                        column: x => x.AssetQuoteId,
+                        principalTable: "Assets",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AssetRates_AssetQuoteId",
                 table: "AssetRates",
@@ -58,12 +84,25 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
                 columns: new[] { "AssetId", "AssetQuoteId" },
                 unique: true,
                 filter: "[AssetId] IS NOT NULL AND [AssetQuoteId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssetSymbols_AssetQuoteId",
+                table: "AssetSymbols",
+                column: "AssetQuoteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_AssetSymbols_AssetId_AssetQuoteId",
+                table: "AssetSymbols",
+                columns: new[] { "AssetId", "AssetQuoteId" });
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
                 name: "AssetRates");
+
+            migrationBuilder.DropTable(
+                name: "AssetSymbols");
 
             migrationBuilder.DropTable(
                 name: "Assets");

@@ -28,21 +28,24 @@ namespace MagniseCryptocurrenciesApp.HostedServices.HostedServices
         private async Task StoreCurrentAssetsData()
         {
             List<Asset> assets;
+            Task symbolsStoreTask;
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var coinAPIRestService = scope.ServiceProvider.GetService<ICoinAPIRestService>();
                 var assetService = scope.ServiceProvider.GetService<IAssetsService>();
-                var assetRateService = scope.ServiceProvider.GetService<IAssetRateService>();
+                var asserSymbolsService = scope.ServiceProvider.GetService<IAssetSymbolsService>();
 
                 assets = await coinAPIRestService.GetAllAssetsAsync().ConfigureAwait(false);
-
                 await Task.Run(() => assetService.StoreAssets(assets)).ConfigureAwait(false);
+
+                var symbols = await coinAPIRestService.GetAllSymbolsAsync();
+                await Task.Run(() => asserSymbolsService.StoreAssetSymbols(symbols)).ConfigureAwait(false);
             }
 
             foreach (var asset in assets)
             {
-                await Task.Run(() => StoreAssetRate(asset)).ConfigureAwait(false);
+                await Task.Run(async () => await StoreAssetRate(asset).ConfigureAwait(false));
             }
         }
 
@@ -51,7 +54,7 @@ namespace MagniseCryptocurrenciesApp.HostedServices.HostedServices
             return Task.Run(() => _coinAPIWsService.ReadAssetsRateData());
         }
 
-        private async void StoreAssetRate(Asset asset)
+        private async Task StoreAssetRate(Asset asset)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {

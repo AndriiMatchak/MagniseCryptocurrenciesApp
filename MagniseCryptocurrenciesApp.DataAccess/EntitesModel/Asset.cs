@@ -18,5 +18,9 @@ namespace MagniseCryptocurrenciesApp.DataAccess.EntitesModel
         public virtual ICollection<AssetRate> AssetRates { get; set; }
 
         public virtual ICollection<AssetRate> QuoteRates { get; set; }
+
+        public virtual ICollection<AssetSymbol> AssetSymbols { get; set; }
+
+        public virtual ICollection<AssetSymbol> QuoteSymbols { get; set; }
     }
 }

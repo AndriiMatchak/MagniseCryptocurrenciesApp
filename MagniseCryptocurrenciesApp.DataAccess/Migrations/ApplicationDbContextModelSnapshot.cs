@@ -70,6 +70,35 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
                     b.ToTable("AssetRates");
                 });
 
+            modelBuilder.Entity("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.AssetSymbol", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AssetId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("AssetQuoteId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal?>("Price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("Type")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AssetQuoteId");
+
+                    b.HasIndex("AssetId", "AssetQuoteId");
+
+                    b.ToTable("AssetSymbols");
+                });
+
             modelBuilder.Entity("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.AssetRate", b =>
                 {
                     b.HasOne("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.Asset", "Asset")
@@ -79,6 +108,19 @@ namespace MagniseCryptocurrenciesApp.DataAccess.Migrations
 
                     b.HasOne("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.Asset", "Quote")
                         .WithMany("QuoteRates")
+                        .HasForeignKey("AssetQuoteId")
+                        .OnDelete(DeleteBehavior.NoAction);
+                });
+
+            modelBuilder.Entity("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.AssetSymbol", b =>
+                {
+                    b.HasOne("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.Asset", "Asset")
+                        .WithMany("AssetSymbols")
+                        .HasForeignKey("AssetId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("MagniseCryptocurrenciesApp.DataAccess.EntitesModel.Asset", "Quote")
+                        .WithMany("QuoteSymbols")
                         .HasForeignKey("AssetQuoteId")
                         .OnDelete(DeleteBehavior.NoAction);
                 });
