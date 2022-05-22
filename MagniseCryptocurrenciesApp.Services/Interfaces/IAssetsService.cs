@@ -1,5 +1,4 @@
 ﻿using CoinAPI.REST.V1;
-using CoinAPI.WebSocket.V1.DataModels;
 using MagniseCryptocurrenciesApp.Common.DTOs.AssetDTOs;
 using System.Collections.Generic;
 

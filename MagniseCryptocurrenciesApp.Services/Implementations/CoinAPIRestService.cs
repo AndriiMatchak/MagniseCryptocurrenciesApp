@@ -26,6 +26,11 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             return coinApiRestClient.Exchange_rates_get_all_current_ratesAsync(assetId);
         }
 
+        public Task<List<Symbol>> GetAllSymbolsAsync()
+        {
+            return coinApiRestClient.Metadata_list_symbolsAsync();
+        }
+
         public CoinApiRestClient InitClient()
         {
             return new CoinApiRestClient(_configurationManager.GetCoinApiKey());

@@ -3,8 +3,8 @@ namespace MagniseCryptocurrenciesApp.Services.Interfaces
 {
     public interface IConfigurationManagerService
     {
-        public string GetCoinApiKey();
+        string GetCoinApiKey();
 
-        public int GetItemsCountToRatesUpdating();
+        int GetItemsCountToRatesUpdating();
     }
 }
