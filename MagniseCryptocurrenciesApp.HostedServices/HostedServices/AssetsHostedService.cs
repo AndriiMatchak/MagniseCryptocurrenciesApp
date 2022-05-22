@@ -28,7 +28,6 @@ namespace MagniseCryptocurrenciesApp.HostedServices.HostedServices
         private async Task StoreCurrentAssetsData()
         {
             List<Asset> assets;
-            Task symbolsStoreTask;
 
             using (var scope = _serviceScopeFactory.CreateScope())
             {
