@@ -28,6 +28,7 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             var assetRatesToAdd = new List<AssetRate>();
             var assetRatesToUpdate = new List<AssetRate>();
 
+            // TODO: Need to add mutex with tasks waiting.
             foreach (var rate in rates)
             {
                 var dbAssetRate = dbAssetRates.FirstOrDefault(r =>

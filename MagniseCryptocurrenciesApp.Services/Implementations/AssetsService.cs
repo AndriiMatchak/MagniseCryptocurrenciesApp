@@ -5,6 +5,8 @@ using MagniseCryptocurrenciesApp.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace MagniseCryptocurrenciesApp.Services.Implementations
 {
@@ -29,19 +31,37 @@ namespace MagniseCryptocurrenciesApp.Services.Implementations
             var assetsToAdd = new List<Asset>();
             var assetsToUpdate = new List<Asset>();
 
-            foreach (var asset in assets)
-            {
-                var dbAsset = dbAssets.FirstOrDefault(a => a.Id == asset.asset_id);
+            var assetGroups = assets.Select((item, index) => new { index, item })
+                       .GroupBy(x => x.index % 10)
+                       .Select(x => x.Select(y => y.item));
 
-                if (dbAsset != null) {
-                    UpdateAsset(asset, dbAsset);
-                    assetsToUpdate.Add(dbAsset);
-                }
-                else
-                {
-                    assetsToAdd.Add(MapAsset(asset));
-                }
+            var tasks = new List<Task>();
+            var assetGroupsMutex = new Mutex();
+
+            foreach (var assetGroup in assetGroups)
+            {
+                tasks.Add(Task.Run(() => {
+                    foreach (var asset in assetGroup)
+                    {
+                        var dbAsset = dbAssets.FirstOrDefault(a =>
+                        a.Id == asset.asset_id);
+
+                        assetGroupsMutex.WaitOne();
+                        if (dbAsset != null)
+                        {
+                            UpdateAsset(asset, dbAsset);
+                            assetsToUpdate.Add(dbAsset);
+                        }
+                        else
+                        {
+                            assetsToAdd.Add(MapAsset(asset));
+                        }
+                        assetGroupsMutex.ReleaseMutex();
+                    }
+                }));
             }
+
+            Task.WaitAll(tasks.ToArray());
 
             AddAssets(assetsToAdd);
             UpdateAssets(assetsToUpdate);
